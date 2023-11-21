@@ -123,5 +123,5 @@ print("Magento shop installed sucessfully")
 print("Your shop main url: " +base_url)
 print("Your shop admin user name: " +admin_username)
 print("Your shop admin password: " +admin_password)
-print("Enjoy")
+#print("Enjoy")
 

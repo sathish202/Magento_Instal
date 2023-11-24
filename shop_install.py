@@ -20,14 +20,12 @@ new_path = os.chdir(current_wd + "//" + folder_name)
 new_wd = os.getcwd()
 print("New Working directory is :",new_wd)
 
-
 permission_change = os.chmod(new_wd, 0o777)
 permission_vendor = os.chmod(new_wd+ "//" "vendor", 0o777)
 permission_setup = os.chmod(new_wd+ "//" "setup", 0o777)
 permission_app = os.chmod(new_wd+ "//" "app", 0o777)
-
-    #file_info = os.stat(new_wd)
-    #print(file_info)
+#file_info = os.stat(new_wd)
+#print(file_info)
 
 
 # Mysql Connection
@@ -77,10 +75,10 @@ lang = input("Select the shop language from en_US & de_DE :")
 shop_currency = input("Enter the currency to use in the shop. Ex. EUR, USD: ")
 time_zone = "Europe/London"
 use_rewrites = "1"
-opensearch_host = "http://192.168.2.6"
-opensearch_port = "9200"
-opensearch_username = "novalnet"
-opensearch_password = "novalnet"
+ops_host = "http://192.168.2.6"
+ops_port = "9200"
+ops_userName = "novalnet"
+ops_password = "novalnet"
 
 def installation_magento():
     try:
@@ -99,40 +97,32 @@ def installation_magento():
             '--currency='+ shop_currency,
             '--timezone='+ time_zone,
             '--use-rewrites=' + use_rewrites,
-            '--opensearch-host=' + opensearch_host,
-            '--opensearch-port=' + opensearch_port,
-            '--opensearch-username=' + opensearch_username,
-            '--opensearch-password=' + opensearch_password], check=True)
+            '--opensearch-host=' +ops_host,
+            '--opensearch-port='+ops_port,
+            '--opensearch-username='+ops_userName,
+            '--opensearch-password=' +ops_password], check=True)
     except subprocess.CalledProcessError as e:
         print("Error installing Magento. Command:", e.cmd)
         print("Return code:", e.returncode)
         print("Output:", e.output.decode('utf-8'))
     except Exception as e:
-        if e.output is not None:
-             print("Output:", e.output.decode('uft-8'))
-        else:
-            print("No output available")
+        print("Error installing Magento:", str(e))
 installation_magento()
 
+#if __name__ == "__main__":
 
-#Again permission
-
-permission_change = os.chmod(new_wd, 0o777)
-permission_vendor = os.chmod(new_wd+ "//" "vendor", 0o777)
-permission_setup = os.chmod(new_wd+ "//" "setup", 0o777)
-permission_app = os.chmod(new_wd+ "//" "app", 0o777)
-
-new_path
+os.chdir(new_wd)
 dy_upgrade = "php bin/magento setup:upgrade"
-dy_compile = "php bin/magento setup:di:compile"
-dy_deploy = "php bin/magento setup:static-content:deploy -f"
-subprocess.run(dy_upgrade, check=True)
-subprocess.run(dy_compile, check=True)
-subprocess.run(dy_deploy, check=True)
+upgrade_process = subprocess.Popen(dy_upgrade.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+stdout, stderr = upgrade_process.communicate()
+if process.returncode != 0:
+    print(f"Error: {stderr.decode()}")
+else:
+    print(f"Success: {stdout.decode()}")
 
 print("Magento shop installed sucessfully")
 print("Your shop main url: " +base_url)
 print("Your shop admin user name: " +admin_username)
 print("Your shop admin password: " +admin_password)
-#print("Enjoy")
+print("Enjoy")
 

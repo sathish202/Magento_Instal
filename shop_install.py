@@ -3,6 +3,8 @@ import os
 import mysql.connector
 from urllib.parse import urlparse
 
+
+
 #Package Download from composer
 folder_name = input("Enter the directory name: ")
 pck_install = "composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition "+folder_name
@@ -51,13 +53,13 @@ try:
 
 except mysql.connector.Error as error:
     print('Error', error)
-
-
+'''
 #Get Domain 
 def get_domain(url):
     parsed_url = urlparse(url)
     domain = parsed_url.netloc
     return domain
+'''
 
 
 #Installation
@@ -79,6 +81,8 @@ ops_host = "http://192.168.2.6"
 ops_port = "9200"
 ops_userName = "novalnet"
 ops_password = "novalnet"
+
+
 
 def installation_magento():
     try:
@@ -111,14 +115,60 @@ installation_magento()
 
 #if __name__ == "__main__":
 
-os.chdir(new_wd)
-dy_upgrade = "php bin/magento setup:upgrade"
-upgrade_process = subprocess.Popen(dy_upgrade.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-stdout, stderr = upgrade_process.communicate()
-if process.returncode != 0:
-    print(f"Error: {stderr.decode()}")
-else:
-    print(f"Success: {stdout.decode()}")
+deploy_dir = os.chdir(new_wd)
+print(deploy_dir)
+
+deploy_upgrade = "php bin/magento setup:upgrade"
+deploy_compile = "php bin/magento setup:di:compile"
+deploy_content = "php bin/magento setup:static-content:deploy -f"
+#print(deploy_commands)
+
+try:
+    subprocess.run(deploy_upgrade, shell=True, check=True)
+    print(f"Deployment commands {deploy_upgrade} executed sucessfully")
+    subprocess.run(deploy_compile, shell=True, check=True)
+    print(f"Deployment commands {deploy_compile} executed sucessfully")
+    subprocess.run(deploy_content, shell=True, check=True)
+    print(f"Deployment commands {deploy_content} executed sucessfully")
+except subprocess.CalledProcessError as e:
+    print(f"Error during deployment {e}")
+
+
+
+
+
+
+current_wd= os.getcwd()
+#new_path = os.chdir(current_wd + "//" + folder_name, "//")
+#new_path = current_wd + "\\" + folder_name + "\\"
+#os.chir(new_path)
+#print(new_path)
+#new_wd = os.getcwd()
+
+#subprocess.run(new_wd, shell=True)
+
+
+#for i in new_wd:
+permission_change = os.chmod(current_wd, 0o777)
+#permission_pub = os.chmod(new_wd+ "//" "pub/" , 0o777)
+#permission_var = os.chmod(new_wd+ "//" "var/" , 0o777)
+#permission_generated = os.chmod(new_wd+ "//" "generated/", 0o777)
+#permission_vendor = os.chmod(new_wd+ "//" "vendor/", 0o777)
+#permission_setup = os.chmod(new_wd+ "//" "setup/", 0o777)
+#permission_app = os.chmod(new_wd+ "//" "app/", 0o777)
+
+#process = subprocess.Popen(["php bin/magento setup:upgrade"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+#process.wait()
+#if process.returncode != 0:
+    # Handle the error condition here
+ #   print("Error: Process returned non-zero exit code")
+#dy_upgrade = "php bin/magento setup:upgrade"
+#upgrade_process = subprocess.Popen(dy_upgrade.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+#stdout, stderr = upgrade_process.communicate()
+#if process.returncode != 0:
+ #   print(f"Error: {stderr.decode()}")
+#else:
+ #   print(f"Success: {stdout.decode()}")
 
 print("Magento shop installed sucessfully")
 print("Your shop main url: " +base_url)

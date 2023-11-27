@@ -115,6 +115,12 @@ installation_magento()
 
 #if __name__ == "__main__":
 
+#Sample data deploy
+
+sampleData_deploy = "php bin/magento sampledata:deploy"
+subprocess.run(sampleData_deploy, shell=True, check=True)
+
+
 deploy_dir = os.chdir(new_wd)
 print(deploy_dir)
 
@@ -139,6 +145,7 @@ except subprocess.CalledProcessError as e:
 
 
 current_wd= os.getcwd()
+print("The current working directory is: ", current_wd)
 #new_path = os.chdir(current_wd + "//" + folder_name, "//")
 #new_path = current_wd + "\\" + folder_name + "\\"
 #os.chir(new_path)
@@ -149,13 +156,17 @@ current_wd= os.getcwd()
 
 
 #for i in new_wd:
-permission_change = os.chmod(current_wd, 0o777)
-#permission_pub = os.chmod(new_wd+ "//" "pub/" , 0o777)
-#permission_var = os.chmod(new_wd+ "//" "var/" , 0o777)
-#permission_generated = os.chmod(new_wd+ "//" "generated/", 0o777)
-#permission_vendor = os.chmod(new_wd+ "//" "vendor/", 0o777)
-#permission_setup = os.chmod(new_wd+ "//" "setup/", 0o777)
-#permission_app = os.chmod(new_wd+ "//" "app/", 0o777)
+#permission_change = os.chmod(current_wd + "/", 0o777)
+
+
+print("The current path", current_wd + "/")
+permission_filesFolders = os.chmod(current_wd+ "/", 0o777)
+permission_pub = os.chmod(new_wd+ "//" "pub/" , 0o777)
+permission_var = os.chmod(new_wd+ "//" "var/" , 0o777)
+permission_generated = os.chmod(new_wd+ "//" "generated/", 0o777)
+permission_vendor = os.chmod(new_wd+ "//" "vendor/", 0o777)
+permission_setup = os.chmod(new_wd+ "//" "setup/", 0o777)
+permission_app = os.chmod(new_wd+ "//" "app/", 0o777)
 
 #process = subprocess.Popen(["php bin/magento setup:upgrade"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 #process.wait()

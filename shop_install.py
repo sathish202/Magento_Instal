@@ -117,19 +117,27 @@ installation_magento()
 
 #Sample data deploy
 
+#repo_userName = "85de677b52e569bd376f5611ceead12e"
+#repo_password = "5b86f39bd353b26544d6b1f1f7b3abae"
 sampleData_deploy = "php bin/magento sampledata:deploy"
 subprocess.run(sampleData_deploy, shell=True, check=True)
+#subprocess.run(repo_userName, shell=True, check=True)
+#subprocess.run(repo_password, shell=True, check=True)
+
 
 
 deploy_dir = os.chdir(new_wd)
 print(deploy_dir)
 
+deploy_clean = "php bin/magento cache:clean"
 deploy_upgrade = "php bin/magento setup:upgrade"
 deploy_compile = "php bin/magento setup:di:compile"
 deploy_content = "php bin/magento setup:static-content:deploy -f"
 #print(deploy_commands)
 
 try:
+    subprocess.run(deploy_clean, shell=True, check=True)
+    print(f"Deployment commands {deploy_clean} executed sucessfully")
     subprocess.run(deploy_upgrade, shell=True, check=True)
     print(f"Deployment commands {deploy_upgrade} executed sucessfully")
     subprocess.run(deploy_compile, shell=True, check=True)
@@ -158,15 +166,19 @@ print("The current working directory is: ", current_wd)
 #for i in new_wd:
 #permission_change = os.chmod(current_wd + "/", 0o777)
 
-
-print("The current path", current_wd + "/")
-permission_filesFolders = os.chmod(current_wd+ "/", 0o777)
-permission_pub = os.chmod(new_wd+ "//" "pub/" , 0o777)
-permission_var = os.chmod(new_wd+ "//" "var/" , 0o777)
-permission_generated = os.chmod(new_wd+ "//" "generated/", 0o777)
-permission_vendor = os.chmod(new_wd+ "//" "vendor/", 0o777)
-permission_setup = os.chmod(new_wd+ "//" "setup/", 0o777)
-permission_app = os.chmod(new_wd+ "//" "app/", 0o777)
+'''
+for i in folder_name:
+    print("The files and folders are: ",i)
+    os.chmod(folder_name+ "/", 0o777)
+'''
+#print("The current path", current_wd + "/")
+#permission_filesFolders = os.chmod(current_wd+ "/", 0o777)
+#permission_pub = os.chmod(new_wd+ "//" "pub/" , 0o777)
+#permission_var = os.chmod(new_wd+ "//" "var/" , 0o777)
+#permission_generated = os.chmod(new_wd+ "//" "generated/", 0o777)
+#permission_vendor = os.chmod(new_wd+ "//" "vendor/", 0o777)
+#permission_setup = os.chmod(new_wd+ "//" "setup/", 0o777)
+#permission_app = os.chmod(new_wd+ "//" "app/", 0o777)
 
 #process = subprocess.Popen(["php bin/magento setup:upgrade"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 #process.wait()
@@ -180,6 +192,19 @@ permission_app = os.chmod(new_wd+ "//" "app/", 0o777)
  #   print(f"Error: {stderr.decode()}")
 #else:
  #   print(f"Success: {stdout.decode()}")
+
+for root, dirs, files in os.walk(current_wd):
+#    print(f"Current directory: {root}")
+
+    for directory in dirs:
+        dict_permission = os.path.join(root, directory)
+        os.chmod(dict_permission, 0o777)
+    
+    for file in files:
+        file_permission = os.path.join(root, file)
+        os.chmod(file_permission, 0o777)
+
+        
 
 print("Magento shop installed sucessfully")
 print("Your shop main url: " +base_url)

@@ -113,6 +113,18 @@ def installation_magento():
         print("Error installing Magento:", str(e))
 installation_magento()
 
+
+readfile_path = new_wd + "/" + "app/etc/env.php"
+print("The read file path: ", readfile_path)
+read_file = open(readfile_path , 'r')
+for x in read_file:
+    if "admin_" in x:
+        splitvalue = x.split("=>")
+        admin_key = splitvalue[1].replace("'"," ")
+        spaceRemove = admin_key.strip()
+        adminUrl = base_url + "/" + spaceRemove
+#        print(adminUrl)
+
 #if __name__ == "__main__":
 
 #Sample data deploy
@@ -208,6 +220,7 @@ for root, dirs, files in os.walk(current_wd):
 
 print("Magento shop installed sucessfully")
 print("Your shop main url: " +base_url)
+print("Your shop admin url: " +adminUrl)
 print("Your shop admin user name: " +admin_username)
 print("Your shop admin password: " +admin_password)
 print("Enjoy")

@@ -2,15 +2,16 @@ import subprocess
 import os
 import mysql.connector
 from urllib.parse import urlparse
+import db_conn
 
 
 
 #Package Download from composer
 folder_name = input("Enter the directory name: ")
 pck_install = "composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition "+folder_name
-
 subprocess.run(pck_install, shell=True)
 print("Latest shop directory has been installed sucessfully!!!")
+
 
 #Permission to the files
 current_wd= os.getcwd()
@@ -22,14 +23,27 @@ new_path = os.chdir(current_wd + "//" + folder_name)
 new_wd = os.getcwd()
 print("New Working directory is :",new_wd)
 
-permission_change = os.chmod(new_wd, 0o777)
-permission_vendor = os.chmod(new_wd+ "//" "vendor", 0o777)
-permission_setup = os.chmod(new_wd+ "//" "setup", 0o777)
-permission_app = os.chmod(new_wd+ "//" "app", 0o777)
+
+def permissionChange ():
+    for root, dirs, files in os.walk(new_wd):
+        #    print(f"Current directory: {root}")
+        for directory in dirs:
+            dict_permission = os.path.join(root, directory)
+            os.chmod(dict_permission, 0o777)
+            for file in files:
+                 file_permission = os.path.join(root, file)
+                 os.chmod(file_permission, 0o777)
+    return permissionChange()
+
+
+#permission_change = os.chmod(new_wd, 0o777)
+#permission_vendor = os.chmod(new_wd+ "//" "vendor", 0o777)
+#permission_setup = os.chmod(new_wd+ "//" "setup", 0o777)
+#permission_app = os.chmod(new_wd+ "//" "app", 0o777)
 #file_info = os.stat(new_wd)
 #print(file_info)
 
-
+'''
 # Mysql Connection
 host_name = "localhost"
 user_name = "root"
@@ -54,6 +68,7 @@ try:
 except mysql.connector.Error as error:
     print('Error', error)
 '''
+'''
 #Get Domain 
 def get_domain(url):
     parsed_url = urlparse(url)
@@ -64,10 +79,10 @@ def get_domain(url):
 
 #Installation
 base_url = input("Enter the base url for the shop. For ex. https://www.magento2.de/pub: ")
-db_host = host_name
-db_name = database_name
-db_user = user_name
-db_password = password
+db_host = db_conn.host_name
+db_name = db_conn.database_name
+db_user = db_conn.user_name
+db_password = db_conn.password
 admin_firstname = "admin"
 admin_lastname = "admin"
 admin_mail = "testadmin@novalnetsolutions.com"
@@ -145,7 +160,10 @@ deploy_clean = "php bin/magento cache:clean"
 deploy_upgrade = "php bin/magento setup:upgrade"
 deploy_compile = "php bin/magento setup:di:compile"
 deploy_content = "php bin/magento setup:static-content:deploy -f"
-#print(deploy_commands)
+
+moduleStatus = "php bin/magento module:status"
+moduleAdminTwoFactor = "php bin/magento mo:d Magento_AdminAdobeImsTwoFactorAuth"
+moduleTwoFactor = "php bin/magento mo:d Magento_TwoFactorAuth" 
 
 try:
     subprocess.run(deploy_clean, shell=True, check=True)
@@ -156,6 +174,13 @@ try:
     print(f"Deployment commands {deploy_compile} executed sucessfully")
     subprocess.run(deploy_content, shell=True, check=True)
     print(f"Deployment commands {deploy_content} executed sucessfully")
+
+    subprocess.run(moduleStatus, shell=True, check=True)
+    print(f"Deployment commands {moduleStatus} executed sucessfully")
+    subprocess.run(moduleAdminTwoFactor, shell=True, check=True)
+    print(f"Deployment commands {moduleAdminTwoFactor} executed sucessfully")
+    subprocess.run(moduleTwoFactor, shell=True, check=True)
+    print(f"Deployment commands {moduleTwoFactor} executed sucessfully")
 except subprocess.CalledProcessError as e:
     print(f"Error during deployment {e}")
 
@@ -164,8 +189,8 @@ except subprocess.CalledProcessError as e:
 
 
 
-current_wd= os.getcwd()
-print("The current working directory is: ", current_wd)
+#current_wd= os.getcwd()
+#print("The current working directory is: ", current_wd)
 #new_path = os.chdir(current_wd + "//" + folder_name, "//")
 #new_path = current_wd + "\\" + folder_name + "\\"
 #os.chir(new_path)
@@ -204,7 +229,7 @@ for i in folder_name:
  #   print(f"Error: {stderr.decode()}")
 #else:
  #   print(f"Success: {stdout.decode()}")
-
+'''
 for root, dirs, files in os.walk(current_wd):
 #    print(f"Current directory: {root}")
 
@@ -215,7 +240,8 @@ for root, dirs, files in os.walk(current_wd):
     for file in files:
         file_permission = os.path.join(root, file)
         os.chmod(file_permission, 0o777)
-
+'''
+permissionChange()
         
 
 print("Magento shop installed sucessfully")

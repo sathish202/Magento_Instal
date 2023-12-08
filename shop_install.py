@@ -79,10 +79,10 @@ def get_domain(url):
 
 #Installation
 base_url = input("Enter the base url for the shop. For ex. https://www.magento2.de/pub: ")
-db_host = db_conn.host_name
-db_name = db_conn.database_name
-db_user = db_conn.user_name
-db_password = db_conn.password
+#db_host = db_conn.host_name
+#db_name = db_conn.database_name
+#db_user = db_conn.user_name
+#db_password = db_conn.password
 admin_firstname = "admin"
 admin_lastname = "admin"
 admin_mail = "testadmin@novalnetsolutions.com"
@@ -103,10 +103,10 @@ def installation_magento():
     try:
         subprocess.run(['php', 'bin/magento', 'setup:install',
             '--base-url=' + base_url,
-            '--db-host=' +db_host,
-            '--db-name=' + db_name,
-            '--db-user=' + db_user,
-            '--db-password=' +db_password,
+            '--db-host=' + db_conn(host),
+            '--db-name=' + db_conn(database_name),
+            '--db-user=' + db_conn(user),
+            '--db-password=' + db_conn(password),
             '--admin-firstname=' + admin_firstname,
             '--admin-lastname=' +admin_lastname,
             '--admin-email=' +admin_mail,

@@ -15,8 +15,6 @@ print("Latest shop directory has been installed sucessfully!!!")
 #Permission to the files
 current_wd= os.getcwd()
 print("Current working directory is: ",current_wd)
-#new_path = "cd "+folder_name
-#print(new_path)
 new_path = os.chdir(current_wd + "//" + folder_name)
 
 new_wd = os.getcwd()
@@ -34,55 +32,12 @@ def permissionChange ():
                  os.chmod(file_permission, 0o777)
     return permissionChange()
 
-
-#permission_change = os.chmod(new_wd, 0o777)
-#permission_vendor = os.chmod(new_wd+ "//" "vendor", 0o777)
-#permission_setup = os.chmod(new_wd+ "//" "setup", 0o777)
-#permission_app = os.chmod(new_wd+ "//" "app", 0o777)
-#file_info = os.stat(new_wd)
-#print(file_info)
-
-'''
-# Mysql Connection
-host_name = "localhost"
-user_name = "root"
-password = "novalnet"
-try:
-    connection = mysql.connector.connect(host=host_name, user=user_name, passwd=password)
-    if connection.is_connected():
-        print("Your are now connected to MySql server")
-
-    cursor = connection.cursor()
-    database_name = input("Enter the database name: ")
-
-    create_db_query = f"CREATE DATABASE {database_name}"
-
-    cursor.execute(create_db_query)
-    print(f"Database '{database_name}' created sucessfully")
-
-    cursor.close()
-    connection.close()
-    print("MySql server conncetion is close")
-
-except mysql.connector.Error as error:
-    print('Error', error)
-'''
-'''
-#Get Domain 
-def get_domain(url):
-    parsed_url = urlparse(url)
-    domain = parsed_url.netloc
-    return domain
-'''
-
+# Variable for installation
 host=input("Enter the host name: ")
 user=input("Enter the user name: ")
 password=input("Enter the password: ")
 database_name=input("Enter the database name: ")
 db_connect(host, user, password, database_name)
-#print(db_connect(host))
-#print(user)
-#print(password)
 #Installation
 base_url = input("Enter the base url for the shop. For ex. https://www.magento2.de/pub: ")
 #db_host = db_conn.host_name
@@ -102,7 +57,6 @@ ops_host = "http://192.168.2.6"
 ops_port = "9200"
 ops_userName = "novalnet"
 ops_password = "novalnet"
-
 
 
 def installation_magento():
@@ -135,6 +89,7 @@ def installation_magento():
 installation_magento()
 
 
+# Get the Admin key for admin Url
 readfile_path = new_wd + "/" + "app/etc/env.php"
 print("The read file path: ", readfile_path)
 read_file = open(readfile_path , 'r')
@@ -144,33 +99,25 @@ for x in read_file:
         admin_key = splitvalue[1].replace("'"," ")
         spaceRemove = admin_key.strip()
         adminUrl = base_url + "/" + spaceRemove
-#        print(adminUrl)
-
-#if __name__ == "__main__":
 
 #Sample data deploy
 
-#repo_userName = "85de677b52e569bd376f5611ceead12e"
-#repo_password = "5b86f39bd353b26544d6b1f1f7b3abae"
 sampleData_deploy = "php bin/magento sampledata:deploy"
 subprocess.run(sampleData_deploy, shell=True, check=True)
-#subprocess.run(repo_userName, shell=True, check=True)
-#subprocess.run(repo_password, shell=True, check=True)
-
-
 
 deploy_dir = os.chdir(new_wd)
 print(deploy_dir)
 
+# Deploy commands
 deploy_clean = "php bin/magento cache:clean"
 deploy_upgrade = "php bin/magento setup:upgrade"
 deploy_compile = "php bin/magento setup:di:compile"
 deploy_content = "php bin/magento setup:static-content:deploy -f"
-
 moduleStatus = "php bin/magento module:status"
 moduleAdminTwoFactor = "php bin/magento mo:d Magento_AdminAdobeImsTwoFactorAuth"
 moduleTwoFactor = "php bin/magento mo:d Magento_TwoFactorAuth" 
 
+#Execution of deployment commands
 try:
     subprocess.run(deploy_clean, shell=True, check=True)
     print(f"Deployment commands {deploy_clean} executed sucessfully")
@@ -190,55 +137,6 @@ try:
 except subprocess.CalledProcessError as e:
     print(f"Error during deployment {e}")
 
-
-
-
-
-
-#current_wd= os.getcwd()
-#print("The current working directory is: ", current_wd)
-#new_path = os.chdir(current_wd + "//" + folder_name, "//")
-#new_path = current_wd + "\\" + folder_name + "\\"
-#os.chir(new_path)
-#print(new_path)
-#new_wd = os.getcwd()
-
-#subprocess.run(new_wd, shell=True)
-
-
-#for i in new_wd:
-#permission_change = os.chmod(current_wd + "/", 0o777)
-
-'''
-for i in folder_name:
-    print("The files and folders are: ",i)
-    os.chmod(folder_name+ "/", 0o777)
-'''
-#print("The current path", current_wd + "/")
-#permission_filesFolders = os.chmod(current_wd+ "/", 0o777)
-#permission_pub = os.chmod(new_wd+ "//" "pub/" , 0o777)
-#permission_var = os.chmod(new_wd+ "//" "var/" , 0o777)
-#permission_generated = os.chmod(new_wd+ "//" "generated/", 0o777)
-#permission_vendor = os.chmod(new_wd+ "//" "vendor/", 0o777)
-#permission_setup = os.chmod(new_wd+ "//" "setup/", 0o777)
-#permission_app = os.chmod(new_wd+ "//" "app/", 0o777)
-
-#process = subprocess.Popen(["php bin/magento setup:upgrade"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-#process.wait()
-#if process.returncode != 0:
-    # Handle the error condition here
- #   print("Error: Process returned non-zero exit code")
-#dy_upgrade = "php bin/magento setup:upgrade"
-#upgrade_process = subprocess.Popen(dy_upgrade.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-#stdout, stderr = upgrade_process.communicate()
-#if process.returncode != 0:
- #   print(f"Error: {stderr.decode()}")
-#else:
- #   print(f"Success: {stdout.decode()}")
-'''
-for root, dirs, files in os.walk(current_wd):
-#    print(f"Current directory: {root}")
-
     for directory in dirs:
         dict_permission = os.path.join(root, directory)
         os.chmod(dict_permission, 0o777)
@@ -246,9 +144,6 @@ for root, dirs, files in os.walk(current_wd):
     for file in files:
         file_permission = os.path.join(root, file)
         os.chmod(file_permission, 0o777)
-
-#permissionChange()
-        
 
 print("Magento shop installed sucessfully")
 print("Your shop main url: " +base_url)

@@ -1,8 +1,7 @@
 import subprocess
 import os
-import mysql.connector
 from urllib.parse import urlparse
-import db_conn
+from db_conn import db_connect
 
 
 
@@ -76,7 +75,14 @@ def get_domain(url):
     return domain
 '''
 
-
+host=input("Enter the host name: ")
+user=input("Enter the user name: ")
+password=input("Enter the password: ")
+database_name=input("Enter the database name: ")
+db_connect(host, user, password, database_name)
+#print(db_connect(host))
+#print(user)
+#print(password)
 #Installation
 base_url = input("Enter the base url for the shop. For ex. https://www.magento2.de/pub: ")
 #db_host = db_conn.host_name
@@ -103,10 +109,10 @@ def installation_magento():
     try:
         subprocess.run(['php', 'bin/magento', 'setup:install',
             '--base-url=' + base_url,
-            '--db-host=' + db_conn(host),
-            '--db-name=' + db_conn(database_name),
-            '--db-user=' + db_conn(user),
-            '--db-password=' + db_conn(password),
+            '--db-host=' + host,
+            '--db-name=' + database_name,
+            '--db-user=' + user,
+            '--db-password=' + password,
             '--admin-firstname=' + admin_firstname,
             '--admin-lastname=' +admin_lastname,
             '--admin-email=' +admin_mail,
@@ -240,8 +246,8 @@ for root, dirs, files in os.walk(current_wd):
     for file in files:
         file_permission = os.path.join(root, file)
         os.chmod(file_permission, 0o777)
-'''
-permissionChange()
+
+#permissionChange()
         
 
 print("Magento shop installed sucessfully")

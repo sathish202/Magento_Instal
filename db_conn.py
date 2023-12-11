@@ -1,12 +1,15 @@
 import mysql.connector
 
-def db_conn(host,user, password,):
+def db_connect(host,user,password, database_name):
     try:
         connection = mysql.connector.connect(host = host, user = user, password = password)
+#        print(host)
+ #       print(user)
+  #      print(password)
         if connection.is_connected():
             print("Your are now connected to MySql server")
             cursor = connection.cursor()
-            database_name = input("Enter the database name: ")
+#            database_name = input("Enter the database name: ")
             create_db_query = f"CREATE DATABASE {database_name}"
             cursor.execute(create_db_query)
             print(f"Database '{database_name}' created sucessfully")
@@ -15,4 +18,4 @@ def db_conn(host,user, password,):
             print("MySql server conncetion is close")
     except mysql.connector.Error as error:
         print('Error', error)
-db_conn(host=input("Enter the host name: "), user=input("Enter the user name: "), password=input("Enter the password: "))
+#db_connect(host=input("Enter the host name: "), user=input("Enter the user name: "), password=input("Enter the password: "))

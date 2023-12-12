@@ -32,18 +32,14 @@ def permissionChange ():
                  os.chmod(file_permission, 0o777)
     return permissionChange()
 
+
 # Variable for installation
 host=input("Enter the host name: ")
 user=input("Enter the user name: ")
 password=input("Enter the password: ")
 database_name=input("Enter the database name: ")
 db_connect(host, user, password, database_name)
-#Installation
 base_url = input("Enter the base url for the shop. For ex. https://www.magento2.de/pub: ")
-#db_host = db_conn.host_name
-#db_name = db_conn.database_name
-#db_user = db_conn.user_name
-#db_password = db_conn.password
 admin_firstname = "admin"
 admin_lastname = "admin"
 admin_mail = "testadmin@novalnetsolutions.com"
@@ -59,6 +55,7 @@ ops_userName = "novalnet"
 ops_password = "novalnet"
 
 
+# Shop Installation
 def installation_magento():
     try:
         subprocess.run(['php', 'bin/magento', 'setup:install',
@@ -137,14 +134,16 @@ try:
 except subprocess.CalledProcessError as e:
     print(f"Error during deployment {e}")
 
+# Permission for file and folders
+for root, dirs, files in os.walk(new_wd):
     for directory in dirs:
         dict_permission = os.path.join(root, directory)
         os.chmod(dict_permission, 0o777)
-    
-    for file in files:
-        file_permission = os.path.join(root, file)
-        os.chmod(file_permission, 0o777)
+        for file in files:
+            file_permission = os.path.join(root, file)
+            os.chmod(file_permission, 0o777)
 
+#Final Output
 print("Magento shop installed sucessfully")
 print("Your shop main url: " +base_url)
 print("Your shop admin url: " +adminUrl)

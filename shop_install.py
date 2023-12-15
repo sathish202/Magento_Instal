@@ -139,9 +139,9 @@ for root, dirs, files in os.walk(new_wd):
     for directory in dirs:
         dict_permission = os.path.join(root, directory)
         os.chmod(dict_permission, 0o777)
-        for file in files:
-            file_permission = os.path.join(root, file)
-            os.chmod(file_permission, 0o777)
+    for file in files:
+        file_permission = os.path.join(root, file)
+        os.chmod(file_permission, 0o777)
 
 #Final Output
 print("Magento shop installed sucessfully")
